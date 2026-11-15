@@ -1,6 +1,7 @@
 """Stage 2 (transform): add a ``date`` column (YYYY-MM-DD)."""
 
 import csv
+import os
 import sys
 
 
@@ -9,6 +10,7 @@ def main(src: str, dst: str) -> None:
         reader = csv.DictReader(f)
         fieldnames = [*(reader.fieldnames or []), "date"]
         rows = [{**row, "date": row["timestamp"][:10]} for row in reader]
+    os.makedirs(os.path.dirname(dst) or ".", exist_ok=True)
     with open(dst, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()

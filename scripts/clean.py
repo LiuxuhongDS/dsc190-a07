@@ -1,6 +1,7 @@
 """Stage 1 (clean): drop bad rows and normalise timestamps to ISO 8601."""
 
 import csv
+import os
 import sys
 from datetime import datetime
 
@@ -53,6 +54,7 @@ def main(src: str, dst: str) -> None:
     with open(src, newline="") as f:
         rows = list(csv.DictReader(f))
     cleaned = [r for r in map(clean_row, rows) if r is not None]
+    os.makedirs(os.path.dirname(dst) or ".", exist_ok=True)
     with open(dst, "w", newline="") as f:
         writer = csv.DictWriter(
             f, fieldnames=["user_id", "timestamp", "event_type", "duration_seconds"]

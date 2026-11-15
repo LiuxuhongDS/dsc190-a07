@@ -1,6 +1,7 @@
 """Stage 3 (features): add ``duration_minutes`` and ``weekday`` columns."""
 
 import csv
+import os
 import sys
 from datetime import date
 
@@ -28,6 +29,7 @@ def main(src: str, dst: str) -> None:
                     "weekday": WEEKDAY_NAMES[date.fromisoformat(row["date"]).weekday()],
                 }
             )
+    os.makedirs(os.path.dirname(dst) or ".", exist_ok=True)
     with open(dst, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
